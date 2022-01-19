@@ -68,7 +68,6 @@ class MyGP():
         # Get into evaluation (predictive posterior) mode
         self.model.eval()
         self.likelihood.eval()
-
         # Test points are regularly spaced along [0,1]
         # Make predictions by feeding model through likelihood
         with torch.no_grad(), gpytorch.settings.fast_pred_var():

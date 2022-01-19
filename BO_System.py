@@ -36,16 +36,25 @@ class SurrogateModel():
     def train(self):
         self.model.train()
 
+    # def getDataAtX(self, x):
+    #     test_dataset = TensorDataset(x)
+    #     test_loader = DataLoader(test_dataset, batch_size=500, shuffle=False)
+    #     means = torch.tensor([0.])
+    #     with torch.no_grad():
+    #         for x_batch in test_loader:
+    #             pred = self.model.test(x_batch[0])
+    #             means = torch.cat([means, pred.mean])
+    #     means = means[1:]
+    #     return means
+
     def getDataAtX(self, x):
-        test_dataset = TensorDataset(x)
-        test_loader = DataLoader(test_dataset, batch_size=500, shuffle=False)
         means = torch.tensor([0.])
         with torch.no_grad():
-            for x_batch in test_loader:
-                pred = self.model.test(x_batch[0])
-                means = torch.cat([means, pred.mean])
+            pred = self.model.test(x)
+            means = torch.cat([means, pred.mean])
         means = means[1:]
         return means
+
 
     def getPredNum(self, num):
         mean = self.getDataAtX(self.x)
@@ -88,7 +97,7 @@ def getTrainData(n, x, y):
 def main():
     with open("data.txt", "r") as f:
         weidu = int(f.readline())
-        num_data = int(f.readline())
+        num_data = int(f.readline())  # num of train data
         num_key = int(f.readline())
         num_initial = int(f.readline())
     f.close()
@@ -102,7 +111,6 @@ def main():
     y = y.float()
 
     train_x, train_y = getTrainData(num_initial, x, y)
-
     model = SurrogateModel(bound_x=x, train_x=train_x, train_y=train_y, num=num_key, data_dim=x.shape[1],
                            train_times=50)
     pred_index = model.optimization()
