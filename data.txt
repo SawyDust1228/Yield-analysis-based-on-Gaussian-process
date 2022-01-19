@@ -1,0 +1,5 @@
+18
+50000
+20
+30000
+Case information: !dimension number=18, total MC number=50000, key MC number=20
